@@ -8,4 +8,8 @@
         <loc>https://github.io</loc>
         <priority>0.80</priority>
     </url>
+    <url>
+        <loc>https://github.io</loc>
+        <priority>0.80</priority>
+    </url>
 </urlset>
