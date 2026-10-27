@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer Tool</title>
+    <title>WebToolBox - Free Online Tools</title>
     <style>
         :root {
             --bg-color: #f5f5f7;
@@ -21,30 +21,49 @@
             color: var(--text-primary);
             margin: 0;
             padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             box-sizing: border-box;
         }
 
-        .timer-container {
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .tools-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
             background: var(--card-bg);
             border-radius: 20px;
             padding: 32px;
-            width: 100%;
-            max-width: 450px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
             text-align: center;
         }
 
-        .timer-title {
+        .tool-title {
             margin: 0 0 24px 0;
             font-size: 1.6rem;
             font-weight: 600;
             letter-spacing: -0.5px;
         }
 
+        /* Countdown Display Styles */
         .countdown-display {
             display: flex;
             justify-content: space-between;
@@ -78,18 +97,18 @@
             letter-spacing: 0.5px;
         }
 
-        .timer-controls {
+        /* Form Controls */
+        .control-group {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        .date-input-wrapper {
-            position: relative;
+        .input-wrapper {
             text-align: left;
         }
 
-        .date-label {
+        .input-label {
             display: block;
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -97,7 +116,7 @@
             font-weight: 500;
         }
 
-        .date-picker {
+        .styled-input {
             width: 100%;
             padding: 14px;
             border: 1px solid var(--border);
@@ -110,12 +129,12 @@
             color: var(--text-primary);
         }
 
-        .date-picker:focus {
+        .styled-input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
         }
 
-        .timer-btn {
+        .tool-btn {
             background-color: var(--accent);
             color: white;
             border: none;
@@ -128,109 +147,140 @@
             width: 100%;
         }
 
-        .timer-btn:hover {
+        .tool-btn:hover {
             background-color: var(--accent-active);
         }
 
-        .timer-btn:active {
+        .tool-btn:active {
             transform: scale(0.98);
+        }
+
+        /* Calculator Specifics */
+        .calc-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .calc-row .styled-input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--bg-color);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
         }
     </style>
 </head>
 <body>
 
-<div class="timer-container">
-    <h2 class="timer-title">Countdown Timer</h2>
+<div class="header">
+    <h1>WebToolBox</h1>
+    <p>Fast, free, lightweight utilities.</p>
+</div>
+
+<div class="tools-grid">
     
-    <div class="countdown-display">
-        <div class="time-block">
-            <span id="days" class="time-number">00</span>
-            <span class="time-label">Days</span>
+    <!-- TOOL 1: COUNTDOWN TIMER -->
+    <div class="tool-card">
+        <h2 class="tool-title">Countdown Timer</h2>
+        <div class="countdown-display">
+            <div class="time-block"><span id="days" class="time-number">00</span><span class="time-label">Days</span></div>
+            <div class="time-block"><span id="hours" class="time-number">00</span><span class="time-label">Hours</span></div>
+            <div class="time-block"><span id="minutes" class="time-number">00</span><span class="time-label">Mins</span></div>
+            <div class="time-block"><span id="seconds" class="time-number">00</span><span class="time-label">Secs</span></div>
         </div>
-        <div class="time-block">
-            <span id="hours" class="time-number">00</span>
-            <span class="time-label">Hours</span>
-        </div>
-        <div class="time-block">
-            <span id="minutes" class="time-number">00</span>
-            <span class="time-label">Mins</span>
-        </div>
-        <div class="time-block">
-            <span id="seconds" class="time-number">00</span>
-            <span class="time-label">Secs</span>
+        <div class="control-group">
+            <div class="input-wrapper">
+                <label for="target-date" class="input-label">Select Target Date & Time</label>
+                <input type="datetime-local" id="target-date" class="styled-input">
+            </div>
+            <button id="start-btn" class="tool-btn">Start Countdown</button>
         </div>
     </div>
-    
-    <div class="timer-controls">
-        <div class="date-input-wrapper">
-            <label for="target-date" class="date-label">Select Target Date & Time</label>
-            <input type="datetime-local" id="target-date" class="date-picker">
+
+    <!-- TOOL 2: PERCENTAGE CALCULATOR -->
+    <div class="tool-card">
+        <h2 class="tool-title">Percentage Calculator</h2>
+        <div class="control-group">
+            <div class="calc-row">
+                <span>What is</span>
+                <input type="number" id="calc-pct" class="styled-input" placeholder="15">
+                <span>% of</span>
+                <input type="number" id="calc-amount" class="styled-input" placeholder="200">
+                <span>?</span>
+            </div>
+            <button id="calc-btn" class="tool-btn">Calculate</button>
+            <div id="calc-result" class="result-box">Result: —</div>
         </div>
-        <button id="start-btn" class="timer-btn">Start Countdown</button>
     </div>
+
 </div>
 
 <script>
+// Timer Logic
 (function() {
     let countdownInterval;
-
     const startBtn = document.getElementById('start-btn');
     const datePicker = document.getElementById('target-date');
 
     startBtn.addEventListener('click', function() {
         const targetInput = datePicker.value;
         if (!targetInput) return alert('Please select a valid date and time.');
-
         const targetTime = new Date(targetInput).getTime();
-        
         clearInterval(countdownInterval);
         localStorage.setItem('savedTargetTime', targetTime);
-
         startCountdown(targetTime);
     });
 
     function startCountdown(endTime) {
         function updateTimer() {
-            const now = new Date().getTime();
-            const distance = endTime - now;
-
+            const distance = endTime - new Date().getTime();
             if (distance < 0) {
                 clearInterval(countdownInterval);
-                document.getElementById('days').innerText = '00';
-                document.getElementById('hours').innerText = '00';
-                document.getElementById('minutes').innerText = '00';
-                document.getElementById('seconds').innerText = '00';
+                document.querySelectorAll('.time-number').forEach(el => el.innerText = '00');
                 localStorage.removeItem('savedTargetTime');
                 return;
             }
-
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = String(d).padStart(2, '0');
-            document.getElementById('hours').innerText = String(h).padStart(2, '0');
-            document.getElementById('minutes').innerText = String(m).padStart(2, '0');
-            document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+            document.getElementById('days').innerText = String(Math.floor(distance / 86400000)).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((distance % 86400000) / 3600000)).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(Math.floor((distance % 3600000) / 60000)).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(Math.floor((distance % 60000) / 1000)).padStart(2, '0');
         }
-
         updateTimer();
         countdownInterval = setInterval(updateTimer, 1000);
     }
 
-    // Restore timer if one was previously set
     const savedTime = localStorage.getItem('savedTargetTime');
     if (savedTime) {
         startCountdown(parseInt(savedTime));
-        // Fill input field with the saved date formatted for datetime-local
         const dateObj = new Date(parseInt(savedTime));
-        const tzOffset = dateObj.getTimezoneOffset() * 60000;
-        const localISOTime = (new Date(dateObj - tzOffset)).toISOString().slice(0, 16);
-        datePicker.value = localISOTime;
+        datePicker.value = new Date(dateObj - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
     }
 })();
-</script>
 
+// Calculator Logic
+document.getElementById('calc-btn').addEventListener('click', function() {
+    const pct = parseFloat(document.getElementById('calc-pct').value);
+    const amount = parseFloat(document.getElementById('calc-amount').value);
+    const resultBox = document.getElementById('calc-result');
+    
+    if (isNaN(pct) || !amount) {
+        resultBox.innerText = "Please enter valid numbers.";
+        return;
+    }
+    const val = (pct / 100) * amount;
+    resultBox.innerText = `Result: ${Number(val.toFixed(4))}`;
+});
+</script>
 </body>
 </html>
