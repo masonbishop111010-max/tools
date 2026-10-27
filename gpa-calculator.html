@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick GPA Calculator</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; }
+        body { font-family: system-ui, sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 100%; }
+        h2 { color: var(--accent); margin-top: 0; }
+        select { width: 100%; padding: 12px; border: 2px solid #475569; background: #0f172a; color: white; border-radius: 6px; font-size: 16px; margin-bottom: 15px; }
+        .num { font-size: 36px; color: var(--accent); font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>GPA Calculator</h2>
+    <p>Select your grades for 3 courses:</p>
+    <select class="grade" onchange="calc()"><option value="4">A / High Distinction</option><option value="3">B / Distinction</option><option value="2">C / Credit</option><option value="1">D / Pass</option></select>
+    <select class="grade" onchange="calc()"><option value="4">A / High Distinction</option><option value="3">B / Distinction</option><option value="2">C / Credit</option><option value="1">D / Pass</option></select>
+    <select class="grade" onchange="calc()"><option value="4">A / High Distinction</option><option value="3">B / Distinction</option><option value="2">C / Credit</option><option value="1">D / Pass</option></select>
+    <div>Estimated GPA:</div>
+    <div id="gpa" class="num">4.00</div>
+</div>
+<script>
+    function calc() {
+        let sels = document.querySelectorAll('.grade');
+        let sum = 0;
+        sels.forEach(s => sum += parseFloat(s.value));
+        document.getElementById('gpa').innerText = (sum / sels.length).toFixed(2);
+    }
+</script>
+</body>
+</html>
