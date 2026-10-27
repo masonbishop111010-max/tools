@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <title>Download Time Calculator</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f172a;
+      --card: #172238;
+      --card-soft: #1e2b43;
+      --border: #2a3a56;
+      --text: #f1f5f9;
+      --muted: #9aabc2;
+      --accent: #8b9cff;
+      --accent-bright: #a9b5ff;
+      --green: #53d6aa;
+      --shadow: 0 24px 70px rgb(0 0 0 / 30%);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 32px 18px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(ellipse at 50% -15%, rgb(99 102 241 / 17%), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+
+    .dashboard {
+      width: min(100%, 560px);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin: 0 0 14px;
+      color: var(--accent-bright);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px rgb(83 214 170 / 70%);
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(2rem, 7vw, 2.75rem);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+    }
+
+    .intro {
+      max-width: 420px;
+      margin: 12px auto 28px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+      font-size: .98rem;
+    }
+
+    .panel {
+      padding: clamp(20px, 5vw, 30px);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgb(30 43 67 / 96%), rgb(23 34 56 / 98%));
+      box-shadow: var(--shadow);
+    }
+
+    .field + .field { margin-top: 22px; }
+
+    .field-label {
+      display: block;
+      margin-bottom: 9px;
+      color: #d9e2f0;
+      font-size: .88rem;
+      font-weight: 650;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      min-width: 0;
+      height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: #111c30;
+      color: var(--text);
+      transition: border-color .18s, box-shadow .18s;
+    }
+
+    input {
+      padding: 0 15px;
+      font-size: 1.05rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    select {
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgb(139 156 255 / 15%);
+    }
+
+    .result {
+      position: relative;
+      overflow: hidden;
+      margin-top: 26px;
+      padding: 24px 20px;
+      border: 1px solid rgb(139 156 255 / 25%);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 100% 0%, rgb(139 156 255 / 14%), transparent 50%),
+        #121d32;
+      text-align: center;
+    }
+
+    .result-label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 650;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .result-time {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 750;
+      letter-spacing: -.045em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-detail {
+      min-height: 1.4em;
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .options {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-top: 19px;
+      color: #d9e2f0;
+      font-size: .9rem;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .options input {
+      appearance: none;
+      flex: 0 0 19px;
+      width: 19px;
+      height: 19px;
+      margin: 1px 0 0;
+      border-radius: 6px;
+      background: #111c30;
+      cursor: pointer;
+    }
+
+    .options input:checked {
+      border-color: var(--accent);
+      background: var(--accent);
+      box-shadow: inset 0 0 0 4px #111c30;
+    }
+
+    .options input:focus-visible {
+      outline: 3px solid rgb(139 156 255 / 45%);
+      outline-offset: 2px;
+    }
+
+    .examples {
+      margin-top: 25px;
+    }
+
+    .examples-title {
+      margin: 0 0 11px;
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 650;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgb(17 28 48 / 65%);
+      color: #dce4f2;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, transform .18s;
+    }
+
+    .chip:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+      background: rgb(139 156 255 / 10%);
+    }
+
+    .chip:focus-visible {
+      outline: 3px solid rgb(139 156 255 / 35%);
+      outline-offset: 2px;
+    }
+
+    .note {
+      margin: 20px 2px 0;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.55;
+    }
+
+    .note strong { color: #dce4f2; }
+
+    .error {
+      color: #ffb0b0;
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 24px 14px; }
+      .control-row { grid-template-columns: minmax(0, 1fr) 96px; gap: 8px; }
+      .panel { border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="dashboard">
+    <p class="eyebrow">Free download estimator</p>
+    <h1>Download time calculator</h1>
+    <p class="intro">Find out how long your game, update, or file will take to download.</p>
+
+    <section class="panel" aria-label="Download time calculator">
+      <div class="field">
+        <label class="field-label" for="fileSize">File size</label>
+        <div class="control-row">
+          <input id="fileSize" type="number" min="0" step="any" value="100" inputmode="decimal" aria-label="File size">
+          <select id="sizeUnit" aria-label="File size unit">
+            <option value="MB">MB</option>
+            <option value="GB" selected>GB</option>
+            <option value="TB">TB</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="speed">Download speed</label>
+        <div class="control-row">
+          <input id="speed" type="number" min="0" step="any" value="50" inputmode="decimal" aria-label="Download speed">
+          <select id="speedUnit" aria-label="Download speed unit">
+            <option value="Mbps" selected>Mbps</option>
+            <option value="MBps">MB/s</option>
+            <option value="Kbps">Kbps</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="result" aria-live="polite" aria-atomic="true">
+        <p class="result-label">Estimated download time</p>
+        <p class="result-time" id="resultTime">—</p>
+        <p class="result-detail" id="resultDetail">Enter a file size and speed to calculate.</p>
+      </div>
+
+      <label class="options" for="overhead">
+        <input id="overhead" type="checkbox">
+        <span>Add 15% for network overhead and real-world slowdowns</span>
+      </label>
+
+      <div class="examples">
+        <p class="examples-title">Try an example</p>
+        <div class="chips">
+          <button class="chip" type="button" data-size="100" data-size-unit="GB" data-speed="50" data-speed-unit="Mbps">100 GB · 50 Mbps</button>
+          <button class="chip" type="button" data-size="80" data-size-unit="GB" data-speed="100" data-speed-unit="Mbps">80 GB · 100 Mbps</button>
+          <button class="chip" type="button" data-size="25" data-size-unit="GB" data-speed="10" data-speed-unit="MBps">25 GB · 10 MB/s</button>
+        </div>
+      </div>
+
+      <p class="note"><strong>Mbps vs MB/s:</strong> Internet plans usually show megabits per second (Mbps). File sizes use megabytes (MB); 8 megabits equal 1 megabyte.</p>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const fileSize = document.getElementById("fileSize");
+      const sizeUnit = document.getElementById("sizeUnit");
+      const speed = document.getElementById("speed");
+      const speedUnit = document.getElementById("speedUnit");
+      const overhead = document.getElementById("overhead");
+      const resultTime = document.getElementById("resultTime");
+      const resultDetail = document.getElementById("resultDetail");
+
+      const sizeMultipliers = {
+        MB: 1_000_000,
+        GB: 1_000_000_000,
+        TB: 1_000_000_000_000
+      };
+
+      const speedMultipliers = {
+        Mbps: 1_000_000,
+        MBps: 8_000_000,
+        Kbps: 1_000
+      };
+
+      function formatDuration(seconds) {
+        if (seconds < 1) return "Less than a second";
+
+        const units = [
+          ["day", 86_400],
+          ["hour", 3_600],
+          ["minute", 60],
+          ["second", 1]
+        ];
+
+        let remaining = Math.round(seconds);
+        const parts = [];
+
+        for (const [label, length] of units) {
+          const amount = Math.floor(remaining / length);
+          if (amount > 0) {
+            parts.push(`${amount} ${label}${amount === 1 ? "" : "s"}`);
+            remaining %= length;
+          }
+          if (parts.length === 2) break;
+        }
+
+        return parts.join(" ");
+      }
+
+      function update() {
+        const size = Number(fileSize.value);
+        const rate = Number(speed.value);
+
+        resultTime.classList.remove("error");
+
+        if (!Number.isFinite(size) || !Number.isFinite(rate) || size < 0 || rate < 0) {
+          resultTime.textContent = "Check your values";
+          resultTime.classList.add("error");
+          resultDetail.textContent = "Enter numbers that are zero or greater.";
+          return;
+        }
+
+        if (size === 0) {
+          resultTime.textContent = "0 seconds";
+          resultDetail.textContent = "A zero-size file is ready instantly.";
+          return;
+        }
+
+        if (rate === 0) {
+          resultTime.textContent = "Waiting for speed";
+          resultDetail.textContent = "Enter a speed greater than zero.";
+          return;
+        }
+
+        let seconds = (size * sizeMultipliers[sizeUnit.value]) /
+          (rate * speedMultipliers[speedUnit.value]);
+
+        if (overhead.checked) seconds *= 1.15;
+
+        resultTime.textContent = formatDuration(seconds);
+        resultDetail.textContent = overhead.checked
+          ? "Estimate includes 15% extra time."
+          : "Estimate assumes a steady connection at the selected speed.";
+      }
+
+      [fileSize, sizeUnit, speed, speedUnit, overhead].forEach((control) => {
+        control.addEventListener("input", update);
+        control.addEventListener("change", update);
+      });
+
+      document.querySelectorAll(".chip").forEach((button) => {
+        button.addEventListener("click", () => {
+          fileSize.value = button.dataset.size;
+          sizeUnit.value = button.dataset.sizeUnit;
+          speed.value = button.dataset.speed;
+          speedUnit.value = button.dataset.speedUnit;
+          update();
+        });
+      });
+
+      update();
+    })();
+  </script>
+</body>
+</html>
