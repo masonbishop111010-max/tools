@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Download Time Calculator</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f8fafc;
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+        }
+        h2 { color: var(--accent); margin-top: 0; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; color: #94a3b8; font-size: 14px; }
+        input {
+            width: 93%;
+            padding: 12px;
+            border: 2px solid #475569;
+            background: #0f172a;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        input:focus { border-color: var(--accent); outline: none; }
+        .result { margin-top: 25px; font-size: 18px; border-top: 1px solid #334155; padding-top: 20px; }
+        .bold-res { font-size: 28px; color: var(--accent); font-weight: bold; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Download Time Calculator</h2>
+    
+    <div class="input-group">
+        <label>File Size (in Gigabytes / GB):</label>
+        <input type="number" id="fileSize" placeholder="e.g. 50" oninput="calculateTime()">
+    </div>
+    
+    <div class="input-group">
+        <label>Your Internet Speed (in Mbps):</label>
+        <input type="number" id="netSpeed" placeholder="e.g. 100" oninput="calculateTime()">
+    </div>
+    
+    <div class="result">
+        <div>Estimated Download Duration:</div>
+        <div id="timeResult" class="bold-res">0 minutes</div>
+    </div>
+</div>
+
+<script>
+    function calculateTime() {
+        let sizeInGB = document.getElementById('fileSize').value;
+        let speedInMbps = document.getElementById('netSpeed').value;
+        
+        if (sizeInGB <= 0 || speedInMbps <= 0 || sizeInGB === '' || speedInMbps === '') {
+            document.getElementById('timeResult').innerText = "0 minutes";
+            return;
+        }
+        
+        // Calculation Logic: GB to Megabits divided by Mbps speed
+        let totalMegabits = sizeInGB * 8000;
+        let totalSeconds = totalMegabits / speedInMbps;
+        let totalMinutes = totalSeconds / 60;
+        
+        if (totalMinutes < 60) {
+            document.getElementById('timeResult').innerText = Math.round(totalMinutes) + " minutes";
+        } else {
+            let hours = Math.floor(totalMinutes / 60);
+            let mins = Math.round(totalMinutes % 60);
+            document.getElementById('timeResult').innerText = hours + "h " + mins + "m";
+        }
+    }
+</script>
+
+</body>
+</html>
