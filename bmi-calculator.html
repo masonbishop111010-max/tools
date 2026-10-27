@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; }
+        body { font-family: system-ui, sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 100%; }
+        h2 { color: var(--accent); margin-top: 0; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; color: #94a3b8; }
+        input { width: 93%; padding: 10px; border: 2px solid #475569; background: #0f172a; color: white; border-radius: 6px; }
+        .num { font-size: 32px; color: var(--accent); font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>BMI Calculator</h2>
+    <div class="input-group"><label>Weight (kg):</label><input type="number" id="weight" oninput="calc()"></div>
+    <div class="input-group"><label>Height (cm):</label><input type="number" id="height" oninput="calc()"></div>
+    <div style="margin-top:20px;">Your BMI:</div>
+    <div id="result" class="num">0.0</div>
+</div>
+<script>
+    function calc() {
+        let w = document.getElementById('weight').value;
+        let h = document.getElementById('height').value / 100;
+        if(w > 0 && h > 0) {
+            document.getElementById('result').innerText = (w / (h * h)).toFixed(1);
+        } else { document.getElementById('result').innerText = "0.0"; }
+    }
+</script>
+</body>
+</html>
